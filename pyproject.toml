@@ -1,0 +1,32 @@
+[project]
+name = "on-savior-ui"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Adrian Schemel", email = "adrian.schemel@epfl.ch" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+web = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+]
+
+[project.scripts]
+on-savior-ui = "on_savior_ui:main"
+
+[build-system]
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "networkx>=3.6.1",
+    "pandas>=3.0.5",
+    "playwright>=1.62.0",
+    "scikit-learn>=1.9.0",
+    "scipy>=1.18.0",
+]

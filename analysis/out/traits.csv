@@ -1,0 +1,74 @@
+trait,friendly,cost_years,n_enables,n_exclusive,n_forbids,net,share,mean_valence_them,anti,families_enabled
+IsArrogant,Arrogant,-1,29,0,14,15,4.5,21.38,IsHumble,them:Esteem+ them:SelfRespect+:24;us:Intimacy- us:Privacy+:4;no-effect:1
+IsAmbitious,Ambitious,1,19,0,6,13,2.3,12.84,IsComplacent,them:Esteem+ them:SelfRespect+:10;us:Intimacy- us:Privacy+:6;us:Altruism- them:Security-:1;us:Security+ them:Autonomy-:1;no-effect:1
+IsComedian,Comedian,3,16,1,3,13,3.0,8.88,IsHumorless,us:Intimacy- us:Privacy+:8;them:Esteem+ them:SelfRespect+:5;us:Altruism- them:Security-:2;us:Esteem- us:Meaning-:1
+IsObservant,Observant,3,13,0,1,12,2.0,-16.23,IsOblivious,us:Altruism- them:Security-:6;us:Intimacy- us:Privacy+:5;us:Esteem- us:Meaning-:1;them:Esteem+ them:SelfRespect+:1
+IsLustful,Lustful,-2,12,0,1,11,1.5,-2.25,IsChaste,us:Intimacy- us:Privacy+:10;us:Altruism- them:Security-:1;no-effect:1
+IsGregarious,Gregarious,3,23,0,12,11,3.3,-6.12,IsShy,us:Intimacy- us:Privacy+:15;us:Altruism- them:Security-:4;them:Esteem+ them:SelfRespect+:2;us:Esteem- us:Meaning-:1;no-effect:1
+IsSelfish,Selfish,-1,16,0,6,10,2.7,4.88,IsSelfless,them:Esteem+ them:SelfRespect+:8;us:Intimacy- us:Privacy+:4;us:Altruism- them:Security-:1;them:Altruism- them:Privacy+:1;us:Esteem- us:Meaning-:1;us:Security+ them:Autonomy-:1
+IsVengeful,Vengeful,-1,12,0,2,10,1.8,31.67,IsForgiving,them:Esteem+ them:SelfRespect+:11;us:Intimacy- us:Privacy+:1
+IsBrave,Brave,2,13,0,4,9,1.6,0.23,IsCraven,us:Intimacy- us:Privacy+:9;them:Esteem+ them:SelfRespect+:2;us:Altruism- them:Security-:1;no-effect:1
+IsRepulsive,Repulsive,-3,18,0,9,9,2.5,21.78,IsCharismatic,them:Esteem+ them:SelfRespect+:13;us:Intimacy- us:Privacy+:3;us:Security+ them:Autonomy-:1;no-effect:1
+IsLeader,Leader,3,16,0,7,9,2.2,-5.88,IsFollower,us:Intimacy- us:Privacy+:10;us:Altruism- them:Security-:3;them:Esteem+ them:SelfRespect+:2;no-effect:1
+IsTrusting,Trusting,1,9,0,1,8,1.0,-11.98,IsSuspicious,us:Altruism- them:Security-:5;us:Intimacy- us:Privacy+:3;them:Esteem+ them:SelfRespect+:1
+IsGenius,Genius,3,7,0,1,6,1.3,-3.0,IsObtuse,them:Esteem+ them:SelfRespect+:3;us:Altruism- them:Security-:2;us:Intimacy- us:Privacy+:1;us:Esteem- us:Meaning-:1
+IsOptimist,Optimist,1,14,0,8,6,1.6,-9.07,IsPessimist,us:Intimacy- us:Privacy+:7;us:Altruism- them:Security-:4;them:Esteem+ them:SelfRespect+:1;us:Security+ them:Autonomy-:1;no-effect:1
+IsCruel,Cruel,-3,18,0,12,6,2.9,29.28,IsKind,them:Esteem+ them:SelfRespect+:18
+IsLoyal,Loyal,1,6,0,1,5,0.7,5.5,IsTreacherous,them:Esteem+ them:SelfRespect+:4;us:Altruism- them:Security-:2
+IsFinicky,Finicky,-2,8,0,4,4,0.9,11.0,IsApathetic,them:Esteem+ them:SelfRespect+:6;us:Altruism- them:Security-:1;us:Intimacy- us:Privacy+:1
+IsStrong,Strong,2,3,0,0,3,1.5,24.0,IsFeeble,them:Esteem+ them:SelfRespect+:3
+IsBeautiful,Beautiful,1,3,0,0,3,0.6,0.0,IsUgly,us:Intimacy- us:Privacy+:3
+IsTough,Tough,1,3,0,0,3,1.5,24.0,IsFragile,them:Esteem+ them:SelfRespect+:3
+IsGlutton,Glutton,-2,4,0,2,2,0.5,-5.95,IsTemperate,us:Intimacy- us:Privacy+:3;us:Security+ them:Autonomy-:1
+IsObtuse,Obtuse,-3,8,0,6,2,1.1,-4.12,IsGenius,them:Esteem+ them:SelfRespect+:3;us:Altruism- them:Security-:2;us:Intimacy- us:Privacy+:1;us:Esteem- us:Meaning-:1;us:Security+ them:Autonomy-:1
+IsSmoker,Smoker,-1,1,0,0,1,0.2,-8.8,,us:Intimacy- us:Privacy+:1
+IsAgliophobic,Agliophobic,-1,6,0,6,0,0.7,-5.0,IsMasochist,us:Altruism- them:Security-:3;us:Meaning+ them:Meaning+:1;them:Esteem+ them:SelfRespect+:1;us:Intimacy- us:Privacy+:1
+IsClumsy,Clumsy,-1,0,0,0,0,0.0,0.0,IsCoordinated,
+IsVisualImpaired,Visually Impaired,-1,0,0,0,0,0.0,0.0,,
+IsUnfit,Unfit,-3,0,0,0,0,0.0,0.0,IsFit,
+IsWeakStomach,Weak Stomach,-1,0,0,0,0,0.0,0.0,IsIronStomach,
+IsHypovolemic2,Micro-g Hypovolemic,-1,0,0,0,0,0.0,0.0,,
+IsSharpHearing,Sharp Hearing,1,0,0,0,0,0.0,0.0,IsPoorHearing,
+IsTreacherous,Treacherous,-1,12,0,12,0,1.7,31.42,IsLoyal,them:Esteem+ them:SelfRespect+:12
+IsPatient,Patient,1,7,0,7,0,0.8,-16.0,IsImpatient,us:Altruism- them:Security-:4;us:Intimacy- us:Privacy+:2;them:Esteem+ them:SelfRespect+:1
+IsSleeperHeavy,Heavy Sleeper,-1,0,0,0,0,0.0,0.0,IsSleeperLight,
+IsMetabFast,Fast Metabolism,-1,0,0,0,0,0.0,0.0,IsMetabSlow,
+IsHealerFast,Fast Healer,1,0,0,0,0,0.0,0.0,IsHealerSlow,
+IsInsomniac,Insomniac,-2,0,0,0,0,0.0,0.0,,
+IsIronStomach,Iron Stomach,2,0,0,0,0,0.0,0.0,IsWeakStomach,
+IsHealerSlow,Slow Healer,-1,0,0,0,0,0.0,0.0,IsHealerFast,
+IsImmunoSuppressed,Immunosuppressed,-1,0,0,0,0,0.0,0.0,,
+IsFit,Fit,3,0,0,0,0,0.0,0.0,IsUnfit,
+IsCoordinated,Coordinated,1,0,0,0,0,0.0,0.0,IsClumsy,
+IsSleeperLight,Light Sleeper,-1,0,0,0,0,0.0,0.0,IsSleeperHeavy,
+IsMetabSlow,Slow Metabolism,1,0,0,0,0,0.0,0.0,IsMetabFast,
+IsPoorHearing,Poor Hearing,-1,0,0,0,0,0.0,0.0,IsSharpHearing,
+IsUgly,Ugly,-1,0,0,0,0,0.0,0.0,IsBeautiful,
+IsMasochist,Masochist,1,3,0,4,-1,0.3,-7.0,IsAgliophobic,us:Intimacy- us:Privacy+:2;us:Esteem- us:Meaning-:1
+IsHonest,Honest,1,3,0,4,-1,0.8,-1.0,IsLiar,us:Esteem- us:Meaning-:1;us:Intimacy- us:Privacy+:1;them:Esteem+ them:SelfRespect+:1
+IsTidy,Tidy,1,0,0,1,-1,0.0,0.0,IsSlovenly,
+IsSlovenly,Slovenly,-1,0,0,1,-1,0.0,0.0,IsTidy,
+IsDiligent,Diligent,1,5,0,6,-1,0.6,2.4,IsQuitter,them:Esteem+ them:SelfRespect+:3;us:Intimacy- us:Privacy+:1;us:Altruism- them:Security-:1
+IsImpatient,Impatient,-1,8,0,10,-2,1.4,15.0,IsPatient,them:Esteem+ them:SelfRespect+:7;us:Altruism- them:Security-:1
+IsStubborn,Stubborn,1,5,0,7,-2,0.9,11.4,IsPushover,them:Esteem+ them:SelfRespect+:4;us:Security+ them:Autonomy-:1
+IsLiar,Liar,-1,0,0,2,-2,0.0,0.0,IsHonest,
+IsSuspicious,Suspicious,-1,0,0,3,-3,0.0,0.0,IsTrusting,
+IsFragile,Fragile,-1,0,0,3,-3,0.0,0.0,IsTough,
+IsFeeble,Feeble,-2,0,0,3,-3,0.0,0.0,IsStrong,
+IsHumorless,Humorless,-3,5,0,9,-4,0.9,22.2,IsComedian,them:Esteem+ them:SelfRespect+:4;us:Meaning+ them:Meaning+:1
+IsCharismatic,Charismatic,3,14,0,19,-5,2.1,-9.5,IsRepulsive,us:Intimacy- us:Privacy+:9;us:Altruism- them:Security-:4;no-effect:1
+IsOblivious,Oblivious,-3,13,0,19,-6,1.8,8.85,IsObservant,them:Esteem+ them:SelfRespect+:7;us:Intimacy- us:Privacy+:4;us:Esteem- us:Meaning-:1;us:Altruism- them:Security-:1
+IsPushover,Pushover,-1,12,0,19,-7,2.0,-17.48,IsStubborn,us:Altruism- them:Security-:8;us:Intimacy- us:Privacy+:3;them:Altruism- them:Privacy+:1
+IsKind,Kind,3,15,0,22,-7,2.5,-10.87,IsCruel,us:Altruism- them:Security-:8;us:Intimacy- us:Privacy+:5;us:Meaning+ them:Meaning+:1;them:Esteem+ them:SelfRespect+:1
+IsQuitter,Quitter,-1,8,0,16,-8,1.3,-10.5,IsDiligent,us:Altruism- them:Security-:4;them:Altruism- them:Privacy+:1;us:Esteem- us:Meaning-:1;them:Esteem+ them:SelfRespect+:1;us:Intimacy- us:Privacy+:1
+IsPessimist,Pessimist,-1,9,0,17,-8,1.3,8.0,IsOptimist,them:Esteem+ them:SelfRespect+:5;us:Esteem- us:Meaning-:1;us:Meaning+ them:Meaning+:1;us:Altruism- them:Security-:1;us:Intimacy- us:Privacy+:1
+IsSelfless,Selfless,1,9,0,18,-9,2.0,-9.33,IsSelfish,us:Altruism- them:Security-:5;us:Intimacy- us:Privacy+:3;them:Esteem+ them:SelfRespect+:1
+IsHumble,Humble,1,12,0,22,-10,1.5,-14.25,IsArrogant,us:Altruism- them:Security-:7;us:Intimacy- us:Privacy+:3;them:Altruism- them:Privacy+:1;them:Esteem+ them:SelfRespect+:1
+IsForgiving,Forgiving,1,2,0,14,-12,0.2,-21.0,IsVengeful,us:Altruism- them:Security-:2
+IsCraven,Craven,-2,11,0,24,-13,1.6,-9.27,IsBrave,us:Altruism- them:Security-:6;us:Intimacy- us:Privacy+:2;them:Esteem+ them:SelfRespect+:2;us:Meaning+ them:Meaning+:1
+IsTemperate,Temperate,2,0,0,13,-13,0.0,0.0,IsGlutton,
+IsFollower,Follower,-3,10,0,26,-16,1.0,-13.48,IsLeader,us:Altruism- them:Security-:5;us:Intimacy- us:Privacy+:4;them:Esteem+ them:SelfRespect+:1
+IsComplacent,Complacent,-1,5,0,22,-17,0.5,-10.2,IsAmbitious,us:Altruism- them:Security-:4;them:Esteem+ them:SelfRespect+:1
+IsChaste,Chaste,-2,1,0,18,-17,0.1,31.0,IsLustful,them:Esteem+ them:SelfRespect+:1
+IsApathetic,Apathetic,2,11,0,41,-30,1.4,-2.45,IsFinicky,us:Altruism- them:Security-:5;them:Esteem+ them:SelfRespect+:4;us:Intimacy- us:Privacy+:1;us:Esteem- us:Meaning-:1
+IsShy,Shy,-3,5,0,46,-41,0.5,-6.6,IsGregarious,us:Altruism- them:Security-:3;us:Intimacy- us:Privacy+:1;them:Esteem+ them:SelfRespect+:1

@@ -1,0 +1,714 @@
+<title>Ostranauts Social Physics</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #0c1116;
+    --panel: #141b23;
+    --panel-2: #18212b;
+    --line: #1d2732;
+    --line-strong: #2a3745;
+    --ink: #d8e2e6;
+    --ink-2: #8b9aa4;
+    --ink-3: #5c6b76;
+    --accent: #e5a13c;
+    --accent-dim: #8a6524;
+    --pro: #3987e5;
+    --pro-soft: #86b6ef;
+    --hostile: #e66767;
+    --hostile-soft: #d98b8b;
+    --neutral: #8a94a6;
+    --display: "Chakra Petch", "Arial Narrow", sans-serif;
+    --body: "IBM Plex Sans", "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", "Consolas", monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.55;
+    color-scheme: dark;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, th:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
+  /* ---------- hero ---------- */
+  header { border-bottom: 1px solid var(--line); padding: 56px 0 40px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .22em;
+    color: var(--accent); text-transform: uppercase;
+  }
+  h1 {
+    font-family: var(--display); font-weight: 700; font-size: clamp(34px, 5.5vw, 56px);
+    line-height: 1.05; margin: 12px 0 16px; text-wrap: balance; letter-spacing: .01em;
+  }
+  .stand { max-width: 62ch; color: var(--ink-2); font-size: 17px; margin: 0 0 28px; }
+  .stand strong { color: var(--ink); font-weight: 600; }
+  .statrow { display: flex; flex-wrap: wrap; gap: 12px; }
+  .stat {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
+    padding: 10px 18px; min-width: 118px;
+  }
+  .stat b { display: block; font-family: var(--display); font-size: 26px; font-weight: 600; color: var(--ink); }
+  .stat span { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+
+  /* ---------- sections ---------- */
+  section { padding: 48px 0 8px; }
+  .sec-label {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  h2 {
+    font-family: var(--display); font-weight: 600; font-size: 28px; margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .lede { max-width: 68ch; color: var(--ink-2); margin: 0 0 24px; }
+  .lede strong, .lede b { color: var(--ink); }
+
+  .cardgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin: 20px 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 18px; }
+  .card h3 { font-family: var(--display); font-size: 16px; font-weight: 600; margin: 0 0 8px; color: var(--accent); }
+  .card p { margin: 0; font-size: 14px; color: var(--ink-2); }
+  .card p code { color: var(--ink); }
+  code, .mono { font-family: var(--mono); font-size: .92em; }
+
+  /* ---------- chart chrome ---------- */
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 20px; margin: 18px 0; }
+  .panel .chart-title { font-family: var(--display); font-size: 17px; font-weight: 600; margin: 0 0 2px; }
+  .panel .chart-sub { font-size: 13px; color: var(--ink-2); margin: 0 0 14px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-2); margin-top: 12px; }
+  .legend .key { display: inline-flex; align-items: center; gap: 7px; }
+  .swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; flex: none; }
+  .chartbox { overflow-x: auto; }
+  svg text { font-family: var(--mono); }
+
+  #tooltip {
+    position: fixed; z-index: 40; pointer-events: none; display: none;
+    background: #0a0e13f2; border: 1px solid var(--line-strong); border-radius: 6px;
+    padding: 10px 12px; font-size: 12.5px; max-width: 320px; line-height: 1.45;
+    box-shadow: 0 6px 24px #0009;
+  }
+  #tooltip .tt-title { font-family: var(--display); font-size: 14px; color: var(--ink); margin-bottom: 2px; }
+  #tooltip .tt-kv { color: var(--ink-2); }
+  #tooltip .tt-kv b { color: var(--ink); font-weight: 500; }
+  #tooltip .tag { display: inline-block; border-radius: 3px; padding: 0 6px; font-family: var(--mono); font-size: 11px; }
+
+  /* ---------- deals tiles ---------- */
+  .deals { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin: 18px 0; }
+  .deal { border: 1px solid var(--line); border-radius: 8px; padding: 18px; background: var(--panel); }
+  .deal h3 { margin: 0 0 10px; font-family: var(--display); font-size: 16px; }
+  .deal ul { margin: 0; padding: 0; list-style: none; }
+  .deal li { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+  .deal li:first-child { border-top: 0; }
+  .deal .why { color: var(--ink-3); font-family: var(--mono); font-size: 12px; text-align: right; }
+
+  /* ---------- table ---------- */
+  .tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  thead th {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--ink-3); text-align: right; padding: 10px 12px; cursor: pointer; user-select: none;
+    background: var(--panel-2); position: sticky; top: 0; white-space: nowrap;
+  }
+  thead th:first-child { text-align: left; }
+  thead th[aria-sort="descending"]::after { content: " ▾"; color: var(--accent); }
+  thead th[aria-sort="ascending"]::after { content: " ▴"; color: var(--accent); }
+  tbody td { padding: 7px 12px; border-top: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 12.5px; color: var(--ink-2); }
+  tbody td:first-child { text-align: left; font-family: var(--body); font-size: 13.5px; color: var(--ink); }
+  tbody tr:hover { background: var(--panel-2); }
+  .valchip { display: inline-block; min-width: 46px; text-align: center; border-radius: 3px; padding: 1px 6px; color: #0c1116; font-weight: 500; }
+  td .anti { color: var(--ink-3); }
+  .pos { color: #7fc98d; } .neg { color: var(--hostile-soft); }
+
+  /* ---------- families ---------- */
+  .famgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin: 18px 0; }
+  .fam { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--fc, var(--ink-3)); border-radius: 6px; padding: 18px; }
+  .fam h3 { margin: 0; font-family: var(--display); font-size: 17px; font-weight: 600; }
+  .fam .count { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .fam p { font-size: 13.5px; color: var(--ink-2); margin: 8px 0 12px; }
+  .sig { display: grid; gap: 5px; }
+  .sigrow { display: grid; grid-template-columns: 128px 1fr 44px; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+  .sigbar { position: relative; height: 8px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .sigbar i { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
+  .signum { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ---------- graph ---------- */
+  .graph-shell { border: 1px solid var(--line); border-radius: 8px; background: var(--panel); overflow: hidden; margin: 18px 0; }
+  .graph-controls {
+    display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
+    padding: 14px 16px; border-bottom: 1px solid var(--line); background: var(--panel-2);
+  }
+  .graph-controls label { font-family: var(--mono); font-size: 12px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 7px; }
+  select, button.ctl {
+    background: var(--ground); border: 1px solid var(--line-strong); color: var(--ink);
+    font-family: var(--mono); font-size: 12.5px; border-radius: 5px; padding: 6px 9px;
+  }
+  button.ctl { cursor: pointer; }
+  button.ctl:hover { border-color: var(--accent-dim); }
+  .famchips { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+    border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px 11px;
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); background: var(--ground);
+  }
+  .chip[aria-pressed="true"] { border-color: var(--accent); color: var(--ink); background: var(--panel); }
+  .chip .swatch { width: 9px; height: 9px; border-radius: 50%; }
+  #graph-svg { display: block; width: 100%; height: 640px; cursor: grab; touch-action: none; background: #10161d; }
+  #graph-svg.dragging { cursor: grabbing; }
+  .graph-note { padding: 10px 16px; font-size: 12.5px; color: var(--ink-3); border-top: 1px solid var(--line); font-family: var(--mono); }
+  .gcount { color: var(--accent); }
+
+  /* ---------- synergy ---------- */
+  .pairgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin: 18px 0; }
+  .pair-col h3 { font-family: var(--display); font-size: 16px; margin: 0 0 10px; }
+  .pairs { margin: 0; padding: 0; list-style: none; }
+  .pairs li { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--line); font-size: 14px; }
+  .pairs li:first-child { border-top: 0; }
+  .pairs .n { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .axes { columns: 2; column-gap: 28px; font-size: 13.5px; color: var(--ink-2); max-width: 640px; }
+  .axes div { break-inside: avoid; padding: 4px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; }
+  .axes .mono { color: var(--ink-3); }
+
+  /* ---------- method ---------- */
+  .method { font-size: 14px; color: var(--ink-2); max-width: 72ch; }
+  .method code { color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 0 5px; }
+  footer { border-top: 1px solid var(--line); margin-top: 56px; padding: 24px 0 40px; color: var(--ink-3); font-size: 13px; font-family: var(--mono); }
+</style>
+
+<div id="tooltip" role="status"></div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Ship terminal // psych eval // K-Leg OS</div>
+    <h1>Ostranauts Social Physics</h1>
+    <p class="stand">
+      Every social move in the game, decompiled from the shipped JSON into a working model:
+      <strong>which chargen traits unlock or forbid which moves</strong>, what each move actually does to
+      the thirteen psychological need axes, and how the whole conversation system hangs together —
+      priced against the <strong>years</strong> each trait costs (or refunds) in character creation.
+    </p>
+    <div class="statrow" id="statrow"></div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-label">01 · The machine</div>
+    <h2>How a conversation is computed</h2>
+    <p class="lede">
+      Under the hood a chat is bookkeeping. Everything below is read straight from
+      <code>StreamingAssets/data</code> — none of it is speculation, and spot-checks match the wiki's
+      hand-collected numbers exactly.
+    </p>
+    <div class="cardgrid">
+      <div class="card"><h3>Needs are the currency</h3>
+        <p>Each character tracks need axes — Contact, Esteem, Intimacy, Privacy, Self-Respect, Meaning… —
+        scored <code>0–210</code> where <b>lower is better</b>. A rising need is a frustration building up.</p></div>
+      <div class="card"><h3>Moves are transactions</h3>
+        <p>A social move pushes axes on both sides. A dark joke drops the target's Contact need by 12
+        (satisfying) while feeding your own Meaning. An insult inflates their Esteem need. Every delta is in the data.</p></div>
+      <div class="card"><h3>Traits are the gates</h3>
+        <p>Most moves carry an <b>any-of</b> list of enabling traits and a forbid list. There are no
+        all-required gates in the current build — and the check short-circuits on the <b>first</b> match,
+        so a second enabling trait adds nothing to a move you already have.</p></div>
+      <div class="card"><h3>Traits come in mirrored pairs</h3>
+        <p>Gregarious↔Shy, Kind↔Cruel, Leader↔Follower… In chargen a beneficial trait costs 1–3
+        <b>years</b> of your life; taking its harmful mirror refunds years to spend elsewhere.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="economy">
+  <div class="wrap">
+    <div class="sec-label">02 · The trait economy</div>
+    <h2>What a year of your life buys at the airlock</h2>
+    <p class="lede">
+      Each dot is a chargen trait, placed by its <b>year cost</b> (left of zero: the trait <i>refunds</i>
+      years) against the <b>net social moves</b> it unlocks (enables − forbids). Color shows what kind of
+      conversationalist it makes you: blue traits unlock moves that soothe their targets, red traits unlock the knives.
+    </p>
+    <div class="panel">
+      <p class="chart-title">Net moves unlocked vs. chargen year cost</p>
+      <p class="chart-sub">73 traits · hover any dot for the full ledger · labels on the notable extremes</p>
+      <div class="chartbox"><svg id="scatter" width="1020" height="520" role="img" aria-label="Scatter plot of trait year cost against net social moves unlocked"></svg></div>
+      <div class="legend" id="scatter-legend"></div>
+    </div>
+    <div class="deals" id="deals"></div>
+  </div>
+</section>
+
+<section id="traits">
+  <div class="wrap">
+    <div class="sec-label">03 · The full ledger</div>
+    <h2>Every trait, priced</h2>
+    <p class="lede">
+      Click a column to sort. <b>Enables</b> counts moves where the trait appears in the any-of gate;
+      <b>sole gate</b> counts moves nothing else unlocks. <b>Tone</b> is the mean effect of its enabled
+      moves on the target's needs — negative soothes, positive wounds.
+    </p>
+    <div class="tablebox"><table id="trait-table"></table></div>
+  </div>
+</section>
+
+<section id="families">
+  <div class="wrap">
+    <div class="sec-label">04 · Families of outcomes</div>
+    <h2>Five ways a conversation can land</h2>
+    <p class="lede">
+      Clustering all 497 moves by their need-axis effect vectors (cosine distance, agglomerative) yields
+      five substantial families plus a scatter of minor ones. The signature bars show each family's mean
+      push per axis — <span style="color:var(--pro)">satisfying</span> to the left,
+      <span style="color:var(--hostile)">frustrating</span> to the right.
+    </p>
+    <div class="famgrid" id="famgrid"></div>
+  </div>
+</section>
+
+<section id="graph">
+  <div class="wrap">
+    <div class="sec-label">05 · The conversation graph</div>
+    <h2>All 497 moves, wired</h2>
+    <p class="lede">
+      Nodes are moves, colored by family and sized by how many response moves link to them
+      (the game's <code>aInverse</code> reply lists). Click a family chip to isolate it; hover any
+      node for its full ledger. The decompiled selection code settles the likelihood question — the
+      UI shows <b>every</b> valid reply, gated only by a flat per-move appearance roll, and the trait
+      check <b>stops at the first match</b>, so trait value is purely marginal unlocks. To assemble a
+      build against that math — objectives, year weighting, need coverage — use the companion applet:
+      <a href="https://claude.ai/code/artifact/c21e9f97-3c60-47c8-a160-8ec4c73bfeea"><b>Airlock Diplomat</b>, the build planner ↗</a>.
+    </p>
+    <div class="graph-shell">
+      <div class="graph-controls">
+        <label><input type="checkbox" id="hide-flavor"> hide flavor moves</label>
+        <button class="ctl" id="reset-view">reset view</button>
+      </div>
+      <div class="famchips" id="famchips"></div>
+      <svg id="graph-svg" viewBox="0 0 1200 800" aria-label="Network graph of social moves and their response links"></svg>
+      <div class="graph-note" id="graph-note">hover a node · click to pin its ledger · click a family chip to isolate it</div>
+    </div>
+  </div>
+</section>
+
+<section id="synergy">
+  <div class="wrap">
+    <div class="sec-label">06 · Synergy &amp; sabotage</div>
+    <h2>Traits that hunt in packs</h2>
+    <p class="lede">
+      Two traits <b>cooperate</b> when they sit in the same any-of gates — either one unlocks the move, both
+      deepen the same playstyle. They <b>collide</b> when one enables a move the other forbids: points spent
+      on both partially cancel.
+    </p>
+    <div class="pairgrid">
+      <div class="pair-col"><h3>Strongest co-gates</h3><ul class="pairs" id="coops"></ul></div>
+      <div class="pair-col"><h3>Worst collisions</h3><ul class="pairs" id="conflicts"></ul></div>
+    </div>
+    <h3 style="font-family:var(--display);font-size:16px;margin:26px 0 10px">Redundant kits — subset traits</h3>
+    <p class="lede" style="margin-bottom:12px">
+      Because the gate check stops at the first match, a trait whose enable list is contained in a
+      build-mate's contributes <b>nothing</b> beyond its passive effects and its own forbids.
+      These pairs overlap ≥ 80% (⊂ marks a strict subset — the smaller kit is fully covered):
+    </p>
+    <ul class="pairs" id="subsets" style="max-width:640px"></ul>
+    <h3 style="font-family:var(--display);font-size:16px;margin:26px 0 10px">The mirrored axes</h3>
+    <div class="axes" id="axes"></div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="sec-label">07 · Method &amp; caveats</div>
+    <h2>Where this comes from</h2>
+    <div class="method">
+      <p>Parsed from the game's shipped data files (<span id="build-tag" class="mono"></span>):
+      moves from <code>interactions/*.json</code>, gates resolved through <code>condtrigs</code>,
+      effects through the <code>loot</code> condition tables, year costs from <code>traitscores.json</code>.
+      Debug-only moves are excluded. Direction convention verified against the wiki: need stats run 0–210, lower is better.</p>
+      <p><b>Selection mechanics</b> (decompiled from <code>Assembly-CSharp.dll</code> via ILSpy,
+      <code>CondTrigger.Triggered</code> and <code>GUISocialCombat2.SetData</code>): the conversation UI
+      builds one button per reply in the current move's <code>aInverse</code> list that passes its gate.
+      A gate first rolls its flat per-move chance (shown in the tooltips here), then checks forbids, then
+      walks the any-of trait list and <b>returns on the first match</b> — matching more traits changes
+      nothing. Even the "(Trait)" tag the game shows on a button is just the first match. So with free
+      refreshes, trait value is exactly marginal unlocks; redundancy has zero likelihood payoff.</p>
+      <p><b>Caveats.</b> Temporary mood variants of traits (<code>IsBraveTemp</code>) are folded into
+      their base trait. NPC-side reply choice among valid moves and relationship formation
+      (acquaintance/partner rolls) are not analyzed here.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">on-savior-ui · analysis/build_dataset.py · data © Blue Bottle Games, read from the local install</div>
+</footer>
+
+<script>
+"use strict";
+const DATA = /*__DATA__*/null;
+const $ = (s) => document.querySelector(s);
+const SVGNS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+const fmt = (v, d=1) => (v > 0 ? "+" : "") + v.toFixed(d).replace(/\.0$/, "");
+
+/* ---------- derived ---------- */
+const T = DATA.traits, M = DATA.moves, F = DATA.fams, E = DATA.edges;
+T.forEach(t => { t.net = t.en.length - t.fb.length; });
+const NOEFF = F.length - 1, OTHER = F.length - 2;
+const deg = new Array(M.length).fill(0);
+const adj = new Array(M.length).fill(null).map(() => []);
+for (const [a, b] of E) { deg[a]++; deg[b]++; adj[a].push(b); adj[b].push(a); }
+
+/* ---------- stats row ---------- */
+{
+  const s = [[M.length, "social moves"], [T.length, "chargen traits"], [E.length, "reply links"], [13, "need axes"]];
+  $("#statrow").innerHTML = s.map(([b, l]) => `<div class="stat"><b>${b}</b><span>${l}</span></div>`).join("");
+  $("#build-tag").textContent = DATA.build;
+}
+
+/* ---------- tooltip ---------- */
+const tip = $("#tooltip");
+let tipPinned = false;
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.style.display = "block";
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.min(x + 14, innerWidth - w - 12) + "px";
+  tip.style.top = (y + 14 + h > innerHeight ? y - h - 10 : y + 14) + "px";
+}
+function hideTip(force) { if (!tipPinned || force) { tip.style.display = "none"; if (force) tipPinned = false; } }
+
+function toneColor(v) {
+  if (v <= -5) return "var(--pro)";
+  if (v < 0) return "var(--pro-soft)";
+  if (v === 0) return "var(--neutral)";
+  if (v <= 5) return "var(--hostile-soft)";
+  return "var(--hostile)";
+}
+function toneHex(v) {
+  if (v <= -5) return "#3987e5";
+  if (v < 0) return "#86b6ef";
+  if (v === 0) return "#8a94a6";
+  if (v <= 5) return "#d98b8b";
+  return "#e66767";
+}
+function traitTip(t) {
+  return `<div class="tt-title">${t.n} <span class="mono" style="color:var(--ink-3)">${t.c > 0 ? t.c + "y cost" : t.c < 0 ? -t.c + "y refund" : "free"}</span></div>
+  <div class="tt-kv">enables <b>${t.en.length}</b> · sole gate for <b>${t.en.filter(i => M[i].eb.length === 1).length}</b> · forbids <b>${t.fb.length}</b> · net <b>${fmt(t.net, 0)}</b></div>
+  <div class="tt-kv">tone toward targets: <span class="tag" style="background:${toneHex(t.mv)};color:#0c1116">${fmt(t.mv)}</span></div>
+  ${t.anti ? `<div class="tt-kv">mirror: <b>${(T.find(x => x.id === t.anti) || {n: t.anti.replace(/^Is/, "")}).n}</b></div>` : ""}
+  <div class="tt-kv" style="margin-top:4px;color:var(--ink-3)">${t.desc.replace(/\[us\]\s*/g, "").replace(/\[(\w+)\]/g, "$1")}</div>`;
+}
+
+/* ---------- scatter ---------- */
+{
+  const svg = $("#scatter");
+  const W = 1020, H = 520, P = {l: 56, r: 24, t: 18, b: 46};
+  const xs = v => P.l + (v - (-3.4)) / (3.4 * 2) * (W - P.l - P.r);
+  const nets = T.map(t => t.net);
+  const yMin = Math.min(...nets) - 3, yMax = Math.max(...nets) + 3;
+  const ys = v => P.t + (yMax - v) / (yMax - yMin) * (H - P.t - P.b);
+
+  for (let g = Math.ceil(yMin / 10) * 10; g <= yMax; g += 10) {
+    el("line", {x1: P.l, x2: W - P.r, y1: ys(g), y2: ys(g), stroke: g === 0 ? "#2a3745" : "#1d2732", "stroke-width": 1}, svg);
+    el("text", {x: P.l - 8, y: ys(g) + 4, "text-anchor": "end", "font-size": 11, fill: "#5c6b76"}, svg).textContent = g;
+  }
+  for (let c = -3; c <= 3; c++) {
+    el("line", {x1: xs(c), x2: xs(c), y1: P.t, y2: H - P.b, stroke: c === 0 ? "#2a3745" : "#1d2732", "stroke-width": 1}, svg);
+    el("text", {x: xs(c), y: H - P.b + 18, "text-anchor": "middle", "font-size": 11, fill: "#5c6b76"}, svg)
+      .textContent = c === 0 ? "free" : (c < 0 ? `refund ${-c}y` : `cost ${c}y`);
+  }
+  el("text", {x: (P.l + W - P.r) / 2, y: H - 8, "text-anchor": "middle", "font-size": 11.5, fill: "#8b9aa4"}, svg)
+    .textContent = "chargen price in years of your life";
+  el("text", {x: 16, y: (P.t + H - P.b) / 2, "font-size": 11.5, fill: "#8b9aa4",
+    transform: `rotate(-90 16 ${(P.t + H - P.b) / 2})`, "text-anchor": "middle"}, svg)
+    .textContent = "net social moves unlocked";
+  const quad = (x, y, txt, anchor) =>
+    el("text", {x, y, "font-size": 11, fill: "#43505c", "text-anchor": anchor || "start"}, svg).textContent = txt;
+  quad(P.l + 10, P.t + 14, "PAID TO TALK — refunds years, unlocks moves");
+  quad(W - P.r - 10, P.t + 14, "PREMIUM PICKS", "end");
+  quad(P.l + 10, H - P.b - 28, "FREE YEARS, QUIET LIFE");
+  quad(W - P.r - 10, H - P.b - 28, "TRAPS — pay years, lose moves", "end");
+
+  // deterministic jitter to separate same-(cost,net) dots
+  const seen = {};
+  const labelQueue = [];
+  const LABELED = new Set(["IsArrogant","IsShy","IsApathetic","IsTemperate","IsGregarious","IsCruel","IsRepulsive","IsComedian","IsAmbitious","IsFollower","IsForgiving","IsLustful","IsCharismatic","IsKind","IsChaste","IsObservant","IsVengeful","IsHumble"]);
+  T.forEach((t, i) => {
+    const key = t.c + ":" + t.net;
+    const k = (seen[key] = (seen[key] || 0) + 1) - 1;
+    const jx = ((k % 3) - 1) * 7, jy = (Math.floor(k / 3)) * 7;
+    const cx = xs(t.c) + jx, cy = ys(t.net) + jy;
+    t._sx = cx; t._sy = cy;
+    const dot = el("circle", {cx, cy, r: 5.5, fill: toneHex(t.mv), stroke: "#141b23", "stroke-width": 2, tabindex: 0}, svg);
+    dot.style.cursor = "pointer";
+    dot.addEventListener("pointerenter", e => showTip(traitTip(t), e.clientX, e.clientY));
+    dot.addEventListener("pointermove", e => showTip(traitTip(t), e.clientX, e.clientY));
+    dot.addEventListener("pointerleave", () => hideTip());
+    if (LABELED.has(t.id)) labelQueue.push({t, cx, cy});
+  });
+  // place labels with edge-aware anchoring and greedy vertical de-collision
+  labelQueue.sort((a, b) => a.cx - b.cx || a.cy - b.cy);
+  const placed = [];
+  for (const {t, cx, cy} of labelQueue) {
+    const atRight = cx > W - 130;
+    let lx = atRight ? cx - 9 : cx + 9;
+    let ly = cy + (t.net >= 0 ? -8 : 14);
+    for (let guard = 0; guard < 8; guard++) {
+      const hit = placed.find(p => Math.abs(p.lx - lx) < 92 && Math.abs(p.ly - ly) < 13);
+      if (!hit) break;
+      ly = hit.ly + 13;
+    }
+    placed.push({lx, ly});
+    el("text", {x: lx, y: ly, "font-size": 11, fill: "#c3ced4",
+      "text-anchor": atRight ? "end" : "start"}, svg).textContent = t.n;
+  }
+
+  $("#scatter-legend").innerHTML = [
+    ["#3987e5", "soothing kit (tone ≤ −5)"], ["#86b6ef", "leans soothing"], ["#8a94a6", "neutral / no enables"],
+    ["#d98b8b", "leans hostile"], ["#e66767", "hostile kit (tone > +5)"],
+  ].map(([c, l]) => `<span class="key"><span class="swatch" style="background:${c}"></span>${l}</span>`).join("");
+}
+
+/* ---------- deals ---------- */
+{
+  const byNet = [...T].sort((a, b) => b.net - a.net);
+  const bargains = byNet.filter(t => t.c < 0 && t.net > 5).slice(0, 5);
+  const traps = [...T].filter(t => t.c > 0).sort((a, b) => a.net - b.net).slice(0, 5);
+  const silent = [...T].filter(t => t.c < 0 && t.net < -10).sort((a, b) => a.net - b.net).slice(0, 5);
+  const mk = (title, items, why) => `<div class="deal"><h3>${title}</h3><ul>${
+    items.map(t => `<li><span>${t.n}</span><span class="why">${why(t)}</span></li>`).join("")}</ul></div>`;
+  $("#deals").innerHTML =
+    mk("Bargains — get paid, talk more", bargains, t => `+${-t.c}y · net ${fmt(t.net, 0)} moves`) +
+    mk("Traps — pay years, lose your voice", traps, t => `−${t.c}y · net ${fmt(t.net, 0)} moves`) +
+    mk("Free years, if you can stay quiet", silent, t => `+${-t.c}y · net ${fmt(t.net, 0)} moves`);
+}
+
+/* ---------- trait table ---------- */
+{
+  const cols = [
+    ["Trait", t => t.n, "n"],
+    ["Years", t => t.c, "c"],
+    ["Enables", t => t.en.length, e => e.en.length],
+    ["Sole gate", t => t.en.filter(i => M[i].eb.length === 1).length, t => t.en.filter(i => M[i].eb.length === 1).length],
+    ["Forbids", t => t.fb.length, t => t.fb.length],
+    ["Net", t => t.net, "net"],
+    ["Tone", t => t.mv, "mv"],
+    ["Mirror", t => (T.find(x => x.id === t.anti) || {n: t.anti ? t.anti.replace(/^Is/, "") : "—"}).n, "anti"],
+  ];
+  const table = $("#trait-table");
+  let sortKey = 5, sortDir = -1;
+  function value(t, ci) {
+    const c = cols[ci][1];
+    return c(t);
+  }
+  function render() {
+    const rows = [...T].sort((a, b) => {
+      const va = value(a, sortKey), vb = value(b, sortKey);
+      return (typeof va === "string" ? va.localeCompare(vb) : va - vb) * sortDir;
+    });
+    table.innerHTML = `<thead><tr>${cols.map(([h], i) =>
+      `<th tabindex="0" data-i="${i}" ${i === sortKey ? `aria-sort="${sortDir < 0 ? "descending" : "ascending"}"` : ""}>${h}</th>`
+    ).join("")}</tr></thead><tbody>${rows.map(t => `<tr>
+      <td>${t.n}</td>
+      <td>${t.c > 0 ? "−" + t.c : t.c < 0 ? "+" + (-t.c) : "0"}</td>
+      <td>${t.en.length}</td>
+      <td>${t.en.filter(i => M[i].eb.length === 1).length}</td>
+      <td>${t.fb.length}</td>
+      <td class="${t.net > 0 ? "pos" : t.net < 0 ? "neg" : ""}">${fmt(t.net, 0)}</td>
+      <td><span class="valchip" style="background:${toneHex(t.mv)}">${fmt(t.mv)}</span></td>
+      <td class="anti">${value(t, 7)}</td></tr>`).join("")}</tbody>`;
+    table.querySelectorAll("th").forEach(th => {
+      const go = () => {
+        const i = +th.dataset.i;
+        if (i === sortKey) sortDir *= -1; else { sortKey = i; sortDir = i === 0 || i === 7 ? 1 : -1; }
+        render();
+      };
+      th.addEventListener("click", go);
+      th.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    });
+  }
+  render();
+}
+
+/* ---------- families ---------- */
+{
+  $("#famgrid").innerHTML = F.map((f, i) => `<div class="fam" style="--fc:${f.color}">
+    <h3>${f.label} <span class="count">· ${f.n} moves</span></h3>
+    <p>${f.blurb}</p>
+    ${f.sig.length ? `<div class="sig">${f.sig.map(s => {
+      const w = Math.min(Math.abs(s.mean) / 20 * 50, 50);
+      const left = s.mean < 0;
+      return `<div class="sigrow"><span>${s.axis}</span><div class="sigbar">
+        <i style="background:${left ? "#3987e5" : "#e66767"};${left ? `right:50%;width:${w}%` : `left:50%;width:${w}%`}"></i>
+        <i style="left:50%;width:1px;background:#5c6b76"></i>
+      </div><span class="signum">${fmt(s.mean)}</span></div>`;
+    }).join("")}</div>` : ""}
+  </div>`).join("");
+}
+
+/* ---------- graph ---------- */
+{
+  const svg = $("#graph-svg");
+  const GW = 1200, GH = 800;
+  let vb = {x: 0, y: 0, w: GW, h: GH};
+  const setVB = () => svg.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  // scale layout coords to canvas
+  const xsAll = M.map(m => m.x), ysAll = M.map(m => m.y);
+  const xmin = Math.min(...xsAll), xmax = Math.max(...xsAll);
+  const ymin = Math.min(...ysAll), ymax = Math.max(...ysAll);
+  const gx = m => 40 + (m.x - xmin) / (xmax - xmin) * (GW - 80);
+  const gy = m => 40 + (m.y - ymin) / (ymax - ymin) * (GH - 80);
+
+  const edgeLayer = el("g", {}, svg);
+  const nodeLayer = el("g", {}, svg);
+  const edgeEls = E.map(([a, b]) =>
+    el("line", {x1: gx(M[a]), y1: gy(M[a]), x2: gx(M[b]), y2: gy(M[b]),
+      stroke: "#223040", "stroke-width": 0.5, opacity: 0.45}, edgeLayer));
+  const nodeEls = M.map((m, i) => {
+    const r = m.f === NOEFF ? 2.2 : 3 + Math.sqrt(deg[i]) * 0.75;
+    const c = el("circle", {cx: gx(m), cy: gy(m), r, fill: F[m.f].color,
+      stroke: "#0c1116", "stroke-width": 0.8}, nodeLayer);
+    c.style.cursor = "pointer";
+    return c;
+  });
+
+  function moveTip(i) {
+    const m = M[i];
+    const needs = (o, who) => Object.entries(o).map(([a, v]) =>
+      `<span style="color:${v < 0 ? "#86b6ef" : "#d98b8b"}">${who}·${a} ${fmt(v, 0)}</span>`).join(" · ");
+    return `<div class="tt-title">${m.t}</div>
+      <div class="tt-kv"><span class="tag" style="background:${F[m.f].color};color:#0c1116">${F[m.f].label}</span>
+      ${m.op ? ' <span class="tag" style="background:#2a3745;color:#c3ced4">opener</span>' : ""}</div>
+      ${Object.keys(m.nu).length ? `<div class="tt-kv">${needs(m.nu, "you")}</div>` : ""}
+      ${Object.keys(m.nt).length ? `<div class="tt-kv">${needs(m.nt, "them")}</div>` : ""}
+      <div class="tt-kv">unlocked by: <b>${m.eb.length ? m.eb.map(ti => T[ti].n).join(", ") : "anyone"}</b></div>
+      ${m.fb.length ? `<div class="tt-kv">forbidden to: <b>${m.fb.map(ti => T[ti].n).join(", ")}</b></div>` : ""}
+      ${m.ch != null && m.ch < 1 ? `<div class="tt-kv">appears on <b>${Math.round(m.ch * 100)}%</b> of refreshes</div>` : ""}
+      <div class="tt-kv" style="color:var(--ink-3)">${adj[i].length} reply links · ${m.id}</div>`;
+  }
+
+  let famIso = -1, hideFlavor = false;
+
+  function restyle() {
+    const dimByFam = i => famIso >= 0 && M[i].f !== famIso;
+    const hidden = i => hideFlavor && M[i].f === NOEFF;
+    M.forEach((m, i) => {
+      const n = nodeEls[i];
+      n.style.display = hidden(i) ? "none" : "";
+      n.setAttribute("opacity", dimByFam(i) ? 0.12 : 1);
+      n.setAttribute("stroke", "#0c1116");
+      n.setAttribute("stroke-width", 0.8);
+    });
+    E.forEach(([a, b], k) => {
+      const vis = !(hidden(a) || hidden(b));
+      edgeEls[k].style.display = vis ? "" : "none";
+      edgeEls[k].setAttribute("opacity", dimByFam(a) && dimByFam(b) ? 0.06 : 0.45);
+    });
+  }
+
+  nodeEls.forEach((n, i) => {
+    n.addEventListener("pointerenter", e => {
+      if (!tipPinned) showTip(moveTip(i), e.clientX, e.clientY);
+      adj[i].forEach(j => { nodeEls[j].setAttribute("stroke", "#c3ced4"); nodeEls[j].setAttribute("stroke-width", 1.6); });
+    });
+    n.addEventListener("pointerleave", () => { hideTip(); restyle(); });
+    n.addEventListener("click", e => {
+      e.stopPropagation();
+      tipPinned = false; showTip(moveTip(i), e.clientX, e.clientY); tipPinned = true;
+    });
+  });
+  svg.addEventListener("click", () => hideTip(true));
+
+  // family chips
+  $("#famchips").innerHTML = F.map((f, i) =>
+    `<button class="chip" data-f="${i}" aria-pressed="false"><span class="swatch" style="background:${f.color}"></span>${f.label} · ${f.n}</button>`).join("");
+  document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", () => {
+    const f = +ch.dataset.f;
+    famIso = famIso === f ? -1 : f;
+    document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(+c.dataset.f === famIso)));
+    restyle();
+  }));
+
+  $("#hide-flavor").addEventListener("change", e => { hideFlavor = e.target.checked; restyle(); });
+
+  // pan / zoom
+  let drag = null;
+  svg.addEventListener("pointerdown", e => {
+    drag = {x: e.clientX, y: e.clientY, vx: vb.x, vy: vb.y};
+    svg.classList.add("dragging");
+    svg.setPointerCapture(e.pointerId);
+  });
+  svg.addEventListener("pointermove", e => {
+    if (!drag) return;
+    const r = svg.getBoundingClientRect();
+    vb.x = drag.vx - (e.clientX - drag.x) * vb.w / r.width;
+    vb.y = drag.vy - (e.clientY - drag.y) * vb.h / r.height;
+    setVB();
+  });
+  svg.addEventListener("pointerup", e => { drag = null; svg.classList.remove("dragging"); svg.releasePointerCapture(e.pointerId); });
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+    const r = svg.getBoundingClientRect();
+    const mx = vb.x + (e.clientX - r.left) / r.width * vb.w;
+    const my = vb.y + (e.clientY - r.top) / r.height * vb.h;
+    const k = e.deltaY > 0 ? 1.18 : 1 / 1.18;
+    const nw = Math.min(Math.max(vb.w * k, 120), 4000);
+    const nh = nw * GH / GW;
+    vb = {x: mx - (mx - vb.x) * nw / vb.w, y: my - (my - vb.y) * nh / vb.h, w: nw, h: nh};
+    setVB();
+  }, {passive: false});
+  $("#reset-view").addEventListener("click", () => { vb = {x: 0, y: 0, w: GW, h: GH}; setVB(); });
+  setVB();
+  restyle();
+}
+
+/* ---------- synergy ---------- */
+{
+  const co = new Map(), con = new Map();
+  const bump = (map, a, b) => {
+    const k = a < b ? a + "|" + b : b + "|" + a;
+    map.set(k, (map.get(k) || 0) + 1);
+  };
+  M.forEach(m => {
+    for (const a of m.eb) {
+      for (const b of m.eb) if (a < b) bump(co, a, b);
+      for (const b of m.fb) bump(con, a, b);
+    }
+  });
+  const top = (map, n) => [...map.entries()].sort((x, y) => y[1] - x[1]).slice(0, n);
+  const name = i => T[i].n;
+  $("#coops").innerHTML = top(co, 12).map(([k, v]) => {
+    const [a, b] = k.split("|").map(Number);
+    return `<li><span>${name(a)} + ${name(b)}</span><span class="n">${v} shared gates</span></li>`;
+  }).join("");
+  $("#conflicts").innerHTML = top(con, 12).map(([k, v]) => {
+    const [a, b] = k.split("|").map(Number);
+    return `<li><span>${name(a)} × ${name(b)}</span><span class="n">${v} cancelled moves</span></li>`;
+  }).join("");
+  $("#subsets").innerHTML = DATA.subsets.slice(0, 14).map(s =>
+    `<li><span>${s.sub} ${s.strict ? "⊂" : "≈⊂"} ${s.sup}</span>
+     <span class="n">${s.covered}/${s.n_sub} of its ${s.n_sub}-move kit inside ${s.sup}'s ${s.n_sup}</span></li>`
+  ).join("") || "<li>none at ≥80% overlap</li>";
+
+  const seen = new Set();
+  $("#axes").innerHTML = T.filter(t => {
+    if (!t.anti || seen.has(t.id)) return false;
+    seen.add(t.id); seen.add(t.anti);
+    return T.some(x => x.id === t.anti);
+  }).map(t => {
+    const b = T.find(x => x.id === t.anti);
+    return `<div><span>${t.n} ↔ ${b.n}</span><span class="mono">${fmt(t.net, 0)} / ${fmt(b.net, 0)}</span></div>`;
+  }).join("");
+}
+</script>

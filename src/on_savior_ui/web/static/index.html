@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Save Library — on-savior-ui</title>
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🛰️</text></svg>">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="sigil">🛰️</span>
+    <div>
+      <h1>Save Library</h1>
+      <p id="root-path" class="muted mono">loading…</p>
+    </div>
+  </div>
+  <div class="topbar-tools">
+    <input id="search" type="search" placeholder="Search saves, characters, ships, tags…" autocomplete="off">
+    <span id="totals" class="pill muted"></span>
+    <button id="filters-toggle" class="ghost">Filters</button>
+    <button id="refresh" class="ghost" title="Rescan the saves folder">Refresh</button>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar">
+    <section>
+      <h2>Group by</h2>
+      <div class="segmented" id="group-by">
+        <button data-value="continuity" class="on">Continuity</button>
+        <button data-value="character">Character</button>
+        <button data-value="ship">Ship</button>
+        <button data-value="version">Version</button>
+        <button data-value="none">Flat</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Sort</h2>
+      <select id="sort-by">
+        <option value="saved_desc">Newest saved first</option>
+        <option value="saved_asc">Oldest saved first</option>
+        <option value="play_desc">Most play time</option>
+        <option value="play_asc">Least play time</option>
+        <option value="money_desc">Richest</option>
+        <option value="size_desc">Largest on disk</option>
+        <option value="name_asc">Name (A→Z)</option>
+      </select>
+    </section>
+
+    <section>
+      <h2>View</h2>
+      <div class="segmented" id="view-mode">
+        <button data-value="cards" class="on">Cards</button>
+        <button data-value="lineage">Lineage</button>
+        <button data-value="table">Table</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Filter</h2>
+      <label class="check"><input type="checkbox" id="f-autosaves"> Hide autosaves</label>
+      <label class="check"><input type="checkbox" id="f-starred"> Starred only</label>
+      <label class="check"><input type="checkbox" id="f-noted"> Has note</label>
+      <select id="f-character"><option value="">Any character</option></select>
+      <select id="f-version"><option value="">Any build</option></select>
+      <div id="tag-filters" class="tags"></div>
+      <button id="clear-filters" class="ghost small">Clear filters</button>
+    </section>
+
+    <section id="caps" class="muted small"></section>
+  </aside>
+
+  <div id="content" class="content"><p class="muted pad">Loading library…</p></div>
+</main>
+
+<aside id="drawer" class="drawer" hidden>
+  <div class="drawer-head">
+    <div>
+      <h2 id="d-name">—</h2>
+      <p id="d-sub" class="muted mono small"></p>
+    </div>
+    <button id="d-close" class="ghost" title="Close">✕</button>
+  </div>
+  <div id="d-body" class="drawer-body"></div>
+</aside>
+
+<div id="modal" class="modal" hidden>
+  <div class="modal-card">
+    <div class="drawer-head">
+      <h2 id="m-title">—</h2>
+      <button id="m-close" class="ghost">✕</button>
+    </div>
+    <div id="m-body" class="modal-body"></div>
+  </div>
+</div>
+
+<div id="toasts" class="toasts"></div>
+<script src="/app.js"></script>
+</body>
+</html>
