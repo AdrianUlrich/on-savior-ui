@@ -88,6 +88,12 @@ Previews retention for continuities with a budget set (match by id or a
 substring of the label; omit for all), listing every save with keep/drop and the
 reason. `--apply` carries it out.
 
+### `bangbang [--host H] [--port P]`
+
+Launches the bang-bang burn planner (a Streamlit app) at
+`http://localhost:8501` by default. See [bangbang.md](bangbang.md) for the
+data/intent split and the underlying physics.
+
 ## Environment variables
 
 | Variable | Meaning |

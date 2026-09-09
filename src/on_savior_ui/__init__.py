@@ -42,6 +42,13 @@ def _add_rotate(sub: argparse._SubParsersAction) -> None:
     p.add_argument("--trash-dir")
 
 
+def _add_bangbang(sub: argparse._SubParsersAction) -> None:
+    p = sub.add_parser("bangbang", help="run the bang-bang burn planner (Streamlit)")
+    p.add_argument("--port", type=int, default=8501)
+    p.add_argument("--host", default="localhost",
+                   help="bind address; use 0.0.0.0 to reach it from another device")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="on-savior-ui")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -57,6 +64,7 @@ def main() -> None:
     _add_serve(sub)
     _add_library(sub)
     _add_rotate(sub)
+    _add_bangbang(sub)
 
     args = parser.parse_args()
 
@@ -111,6 +119,8 @@ def main() -> None:
         _cmd_library(args)
     elif args.cmd == "rotate":
         _cmd_rotate(args)
+    elif args.cmd == "bangbang":
+        _cmd_bangbang(args)
 
 
 def _cmd_library(args: argparse.Namespace) -> None:
@@ -139,6 +149,22 @@ def _cmd_library(args: argparse.Namespace) -> None:
             print(f"   {mark} {ref.play_time:7.2f}h  ${ref.money:>10,.0f}  "
                   f"{ref.size_bytes / 1e6:6.0f} MB  {ref.name}{branch}")
         print()
+
+
+def _cmd_bangbang(args: argparse.Namespace) -> None:
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    app_path = Path(__file__).parent / "bangbang" / "app.py"
+    subprocess.run(
+        [
+            sys.executable, "-m", "streamlit", "run", str(app_path),
+            "--server.port", str(args.port),
+            "--server.address", args.host,
+        ],
+        check=False,
+    )
 
 
 def _cmd_rotate(args: argparse.Namespace) -> None:
